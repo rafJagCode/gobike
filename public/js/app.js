@@ -65919,7 +65919,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         next();
       })["catch"](function () {
         return next({
-          name: 'login'
+          name: 'home'
         });
       });
     }

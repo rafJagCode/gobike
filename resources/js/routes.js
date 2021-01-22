@@ -34,7 +34,7 @@ const router = new VueRouter({
                 Vue.axios.get('api/authenticated').then(()=>{
                     next()
                 }).catch(()=>{
-                    return next({name: 'login'})
+                    return next({name: 'home'})
                 })
             }
         }
