@@ -2587,7 +2587,9 @@ __webpack_require__.r(__webpack_exports__);
       Vue.axios.post('api/login', {
         email: this.email,
         password: this.password
-      }).then(function () {
+      }).then(function (res) {
+        console.log(res);
+
         _this.$router.push({
           name: 'dashboard'
         });

@@ -88,7 +88,8 @@ export default {
   methods: {
     handleSubmit(){
       if(!this.$refs.form.validate()) return;
-      Vue.axios.post('api/login', {email:this.email, password:this.password}).then(()=>{
+      Vue.axios.post('api/login', {email:this.email, password:this.password}).then((res)=>{
+        console.log(res);
         this.$router.push({ name: 'dashboard'});
       }).catch((error)=>{
         this.errors = error.response.data.errors;
