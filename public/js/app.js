@@ -2363,7 +2363,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    Vue.axios.get('/api/user').then(function (res) {
+    Vue.axios.get('/api/user', {
+      withCredentials: true
+    }).then(function (res) {
       _this.$store.dispatch('setUser', res.data);
 
       _this.user = res.data;

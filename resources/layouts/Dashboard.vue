@@ -51,7 +51,7 @@ export default {
         ]
     }),
     mounted(){
-        Vue.axios.get('/api/user').then((res)=>{
+        Vue.axios.get('/api/user', {withCredentials: true}).then((res)=>{
             this.$store.dispatch('setUser', res.data);
             this.user = res.data;
         }).catch((error)=>{
