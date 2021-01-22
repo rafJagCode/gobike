@@ -31,7 +31,7 @@ const router = new VueRouter({
             name: 'dashboard',
             component: Dashboard,
             beforeEnter: (to, from, next) =>{
-                Vue.axios.get('api/authenticated').then(()=>{
+                Vue.axios.get('api/authenticated', {withCredentials: true}).then(()=>{
                     next()
                 }).catch(()=>{
                     return next({name: 'home'})

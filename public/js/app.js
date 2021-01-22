@@ -65915,7 +65915,9 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'dashboard',
     component: _layouts_Dashboard__WEBPACK_IMPORTED_MODULE_5__["default"],
     beforeEnter: function beforeEnter(to, from, next) {
-      vue__WEBPACK_IMPORTED_MODULE_0___default.a.axios.get('api/authenticated').then(function () {
+      vue__WEBPACK_IMPORTED_MODULE_0___default.a.axios.get('api/authenticated', {
+        withCredentials: true
+      }).then(function () {
         next();
       })["catch"](function () {
         return next({
