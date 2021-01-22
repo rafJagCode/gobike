@@ -30,13 +30,13 @@ const router = new VueRouter({
             path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
-            beforeEnter: (to, from, next) =>{
-                Vue.axios.get('api/authenticated', {withCredentials: true}).then(()=>{
-                    next()
-                }).catch(()=>{
-                    return next({name: 'home'})
-                })
-            }
+            // beforeEnter: (to, from, next) =>{
+            //     Vue.axios.get('api/authenticated', {withCredentials: true}).then(()=>{
+            //         next()
+            //     }).catch(()=>{
+            //         return next({name: 'home'})
+            //     })
+            // }
         }
     ]
 });

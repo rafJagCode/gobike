@@ -65913,18 +65913,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   }, {
     path: '/dashboard',
     name: 'dashboard',
-    component: _layouts_Dashboard__WEBPACK_IMPORTED_MODULE_5__["default"],
-    beforeEnter: function beforeEnter(to, from, next) {
-      vue__WEBPACK_IMPORTED_MODULE_0___default.a.axios.get('api/authenticated', {
-        withCredentials: true
-      }).then(function () {
-        next();
-      })["catch"](function () {
-        return next({
-          name: 'home'
-        });
-      });
-    }
+    component: _layouts_Dashboard__WEBPACK_IMPORTED_MODULE_5__["default"] // beforeEnter: (to, from, next) =>{
+    //     Vue.axios.get('api/authenticated', {withCredentials: true}).then(()=>{
+    //         next()
+    //     }).catch(()=>{
+    //         return next({name: 'home'})
+    //     })
+    // }
+
   }]
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
