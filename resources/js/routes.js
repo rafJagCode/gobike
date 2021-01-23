@@ -33,7 +33,8 @@ const router = new VueRouter({
             beforeEnter: (to, from, next) =>{
                 Vue.axios.get('api/authenticated', {withCredentials: true}).then(()=>{
                     next()
-                }).catch(()=>{
+                }).catch((error)=>{
+                    console.log(error);
                     return next({name: 'home'})
                 })
             }

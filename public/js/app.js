@@ -65921,7 +65921,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         withCredentials: true
       }).then(function () {
         next();
-      })["catch"](function () {
+      })["catch"](function (error) {
+        console.log(error);
         return next({
           name: 'home'
         });
