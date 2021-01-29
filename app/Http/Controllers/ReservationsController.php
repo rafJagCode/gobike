@@ -19,16 +19,16 @@ class ReservationsController extends Controller
     }
     public function makeReservation(Request $request)
     {
+        $product = Product::where('id', $request->productId)->first();
+        if(!$product->availability) return response()->json(['message'=>'Product is already reserved'], 422);
+        $product->availability = false;
+        $product->save();
         $reservation = Reservation::create([
             'dateFrom'=>$request->dateFrom,
             'dateTo'=>$request->dateTo,
             'status'=>$request->status,
             'user_id'=>$request->userId
         ]);
-        $product = Product::where('id', $request->productId)->first();
-        if(!$product->availability) return response()->json(['message'=>'Product is already reserved'], 422);
-        $product->availability = false;
-        $product->save();
         $reservation->product()->save($product);
         return $reservation;
     }

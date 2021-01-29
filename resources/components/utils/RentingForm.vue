@@ -96,7 +96,7 @@
             WYPOŻYCZ
         </v-btn>
         <v-dialog width="fit-content" v-model="dialog">
-            <v-card width="fit-content" color="secondary" class="mainOrange--text">
+            <v-card width="fit-content" color="secondary" class="mainOrange--text pa-1">
                 <v-card-title>Potwierdzenie rezerwacji</v-card-title>
                 <v-divider dark></v-divider>
                 <v-layout justify-center align-center class="reservation__confirmation">
@@ -122,13 +122,16 @@
                 </v-layout>
                 <v-divider dark></v-divider>
                 <v-layout justify-end align-center class="pa-2">
-                    <v-btn class="mr-2" color="success" @click="makeReservation()">Potwierdź</v-btn>
+                    <v-progress-circular
+                        indeterminate
+                        color="mainOrange"
+                        v-if="reservationPending"
+                    ></v-progress-circular>
+                    <v-btn class="mx-2" color="success" @click="makeReservation()">Potwierdź</v-btn>
                     <v-btn color="error" @click="dialog = false">Cancel</v-btn>
                 </v-layout>
-                <v-alert type="error" height="20" class="flex-row align-center justify-center">
-                    <div>
-                        Produkt jest już niedostępny
-                    </div>
+                <v-alert v-if="reservationFailed" type="error" class="py-1 ma-1">
+                    Produkt jest już niedostępny
                 </v-alert>
             </v-card>
         </v-dialog>
@@ -146,6 +149,7 @@ export default {
         alertMessage: '',
         dialog: false,
         reservationFailed: false,
+        reservationPending: false,
     }),
     props:{
         product: null
@@ -183,6 +187,8 @@ export default {
             return days*price + 'zł';
         },
         makeReservation(){
+            if(this.reservationPending) return;
+            this.reservationPending = true;
             Vue.axios.post('/api/makeReservation',
             {
                 'dateFrom':this.dateFrom,
@@ -192,10 +198,12 @@ export default {
                 'productId':this.product.id,
             })
             .then(()=>{
+                this.reservationPending = false;
                 this.$router.push({name: 'reservationConfirmation'});
             })
             .catch((error)=>{
-                console.log(error.message);
+                this.reservationPending = false;
+                this.reservationFailed = true;
             });
         }
     },

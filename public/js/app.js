@@ -2977,6 +2977,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2988,7 +2991,8 @@ __webpack_require__.r(__webpack_exports__);
       showAlert: false,
       alertMessage: '',
       dialog: false,
-      reservationFailed: false
+      reservationFailed: false,
+      reservationPending: false
     };
   },
   props: {
@@ -3031,6 +3035,8 @@ __webpack_require__.r(__webpack_exports__);
     makeReservation: function makeReservation() {
       var _this = this;
 
+      if (this.reservationPending) return;
+      this.reservationPending = true;
       Vue.axios.post('/api/makeReservation', {
         'dateFrom': this.dateFrom,
         'dateTo': this.dateTo,
@@ -3038,11 +3044,14 @@ __webpack_require__.r(__webpack_exports__);
         'userId': this.$store.getters.user.id,
         'productId': this.product.id
       }).then(function () {
+        _this.reservationPending = false;
+
         _this.$router.push({
           name: 'reservationConfirmation'
         });
       })["catch"](function (error) {
-        console.log(error.message);
+        _this.reservationPending = false;
+        _this.reservationFailed = true;
       });
     }
   }
@@ -6734,7 +6743,7 @@ var render = function() {
           _c(
             "v-card",
             {
-              staticClass: "mainOrange--text",
+              staticClass: "mainOrange--text pa-1",
               attrs: { width: "fit-content", color: "secondary" }
             },
             [
@@ -6831,10 +6840,16 @@ var render = function() {
                   attrs: { "justify-end": "", "align-center": "" }
                 },
                 [
+                  _vm.reservationPending
+                    ? _c("v-progress-circular", {
+                        attrs: { indeterminate: "", color: "mainOrange" }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "v-btn",
                     {
-                      staticClass: "mr-2",
+                      staticClass: "mx-2",
                       attrs: { color: "success" },
                       on: {
                         click: function($event) {
@@ -6861,20 +6876,17 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-alert",
-                {
-                  staticClass: "flex-row align-center justify-center",
-                  attrs: { type: "error", height: "20" }
-                },
-                [
-                  _c("div", [
-                    _vm._v(
-                      "\n                    Produkt jest już niedostępny\n                "
-                    )
-                  ])
-                ]
-              )
+              _vm.reservationFailed
+                ? _c(
+                    "v-alert",
+                    { staticClass: "py-1 ma-1", attrs: { type: "error" } },
+                    [
+                      _vm._v(
+                        "\n                Produkt jest już niedostępny\n            "
+                      )
+                    ]
+                  )
+                : _vm._e()
             ],
             1
           )
