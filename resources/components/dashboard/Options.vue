@@ -34,6 +34,41 @@ export default {
             ]
         }
     },
+    watch:{
+        '$store.getters.user': function(user){
+            if(user!=null){
+                if(user.account_type==='staff') this.changeOptions();
+            }
+        }
+    },
+    mounted(){
+        if(this.$store.getters.user!=null){
+            if(this.$store.getters.user.account_type==='staff') this.changeOptions();
+        }
+    },
+    methods:{
+        changeOptions(){
+            this.options = [
+                {
+                    name: "Dodaj produkt",
+                    icon: "mdi-bike",
+                    link: "addproduct"
+                },
+                {
+                    name: "Wyszukaj rezerwacje",
+                    icon: "mdi-text-box-search-outline"
+                },
+                {
+                    name: "Stan produktów",
+                    icon: "mdi-clipboard-edit-outline",
+                },
+                {
+                    name: "Ustawienia konta",
+                    icon: "mdi-wrench"
+                }
+            ]
+        }
+    },
     components:{
         optionCard
     }

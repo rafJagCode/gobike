@@ -49,8 +49,18 @@ const router = new VueRouter({
                     component: Options
                 },
                 {
+                    name: 'addproduct',
                     path: 'addproduct',
-                    component: AddProduct
+                    component: AddProduct,
+                    beforeEnter: (to, from, next) =>{
+                        Vue.axios.get('/api/user', {withCredentials: true}).then((res)=>{
+                            if(res.data.account_type==='staff') next();
+                            else next({name: 'options'})
+                        }).catch((error)=>{
+                            console.log(error);
+                            return next({name: 'home'})
+                        });
+                    }
                 },
                 {
                     name: 'products',

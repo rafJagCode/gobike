@@ -2087,6 +2087,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2108,11 +2127,14 @@ __webpack_require__.r(__webpack_exports__);
       }],
       imgRules: [function (v) {
         return !!v || 'Musisz podać nazwę zdjęcia';
-      }]
+      }],
+      addedSuccessful: false
     };
   },
   methods: {
     handleSubmit: function handleSubmit() {
+      var _this = this;
+
       if (!this.$refs.form.validate()) return;
       Vue.axios.post('/api/addproduct', {
         'name': this.name,
@@ -2120,6 +2142,8 @@ __webpack_require__.r(__webpack_exports__);
         'availability': true,
         'description': this.description,
         'img': this.img
+      }).then(function () {
+        _this.addedSuccessful = true;
       });
     }
   }
@@ -2166,6 +2190,36 @@ __webpack_require__.r(__webpack_exports__);
         icon: "mdi-wrench"
       }]
     };
+  },
+  watch: {
+    '$store.getters.user': function $storeGettersUser(user) {
+      if (user != null) {
+        if (user.account_type === 'staff') this.changeOptions();
+      }
+    }
+  },
+  mounted: function mounted() {
+    if (this.$store.getters.user != null) {
+      if (this.$store.getters.user.account_type === 'staff') this.changeOptions();
+    }
+  },
+  methods: {
+    changeOptions: function changeOptions() {
+      this.options = [{
+        name: "Dodaj produkt",
+        icon: "mdi-bike",
+        link: "addproduct"
+      }, {
+        name: "Wyszukaj rezerwacje",
+        icon: "mdi-text-box-search-outline"
+      }, {
+        name: "Stan produktów",
+        icon: "mdi-clipboard-edit-outline"
+      }, {
+        name: "Ustawienia konta",
+        icon: "mdi-wrench"
+      }];
+    }
   },
   components: {
     optionCard: _components_utils_OptionCard__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -3070,13 +3124,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_home_Navigation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/components/home/Navigation */ "./resources/components/home/Navigation.vue");
 /* harmony import */ var _components_home_Footer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/home/Footer */ "./resources/components/home/Footer.vue");
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5128,97 +5175,183 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-form",
-    {
-      ref: "form",
-      staticClass: "ma-6",
-      attrs: { "lazy-validation": "" },
-      model: {
-        value: _vm.valid,
-        callback: function($$v) {
-          _vm.valid = $$v
-        },
-        expression: "valid"
-      }
-    },
+    "v-layout",
+    { attrs: { "justify-center": "", "align-center": "" } },
     [
-      _c("v-text-field", {
-        attrs: {
-          rules: _vm.nameRules,
-          label: "Nazwa",
-          color: "mainOrange",
-          "validate-on-blur": ""
-        },
-        model: {
-          value: _vm.name,
-          callback: function($$v) {
-            _vm.name = $$v
-          },
-          expression: "name"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: _vm.priceRules,
-          label: "Cena",
-          color: "mainOrange",
-          "validate-on-blur": ""
-        },
-        model: {
-          value: _vm.price,
-          callback: function($$v) {
-            _vm.price = $$v
-          },
-          expression: "price"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: _vm.descriptionRules,
-          label: "Opis",
-          color: "mainOrange",
-          "validate-on-blur": ""
-        },
-        model: {
-          value: _vm.description,
-          callback: function($$v) {
-            _vm.description = $$v
-          },
-          expression: "description"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: _vm.imgRules,
-          label: "Zdjęcie",
-          color: "mainOrange",
-          "validate-on-blur": ""
-        },
-        model: {
-          value: _vm.img,
-          callback: function($$v) {
-            _vm.img = $$v
-          },
-          expression: "img"
-        }
-      }),
-      _vm._v(" "),
       _c(
-        "v-btn",
-        {
-          staticClass: "signup-btn secondary--text mt-8",
-          attrs: { type: "submit", outlined: "", rounded: "", block: "" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.handleSubmit()
-            }
-          }
-        },
-        [_vm._v("Dodaj")]
+        "v-card",
+        { attrs: { color: "secondary mainOrange--text", width: "800" } },
+        [
+          _c("v-card-title", [_vm._v("Dodaj produkt")]),
+          _vm._v(" "),
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              staticClass: "ma-6 mainOrange--text",
+              attrs: { width: "500px!important", "lazy-validation": "" },
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c("v-text-field", {
+                attrs: {
+                  dark: "",
+                  rules: _vm.nameRules,
+                  label: "Nazwa",
+                  color: "mainOrange",
+                  "validate-on-blur": ""
+                },
+                model: {
+                  value: _vm.name,
+                  callback: function($$v) {
+                    _vm.name = $$v
+                  },
+                  expression: "name"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  dark: "",
+                  rules: _vm.priceRules,
+                  label: "Cena",
+                  color: "mainOrange",
+                  "validate-on-blur": ""
+                },
+                model: {
+                  value: _vm.price,
+                  callback: function($$v) {
+                    _vm.price = $$v
+                  },
+                  expression: "price"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  dark: "",
+                  rules: _vm.descriptionRules,
+                  label: "Opis",
+                  color: "mainOrange",
+                  "validate-on-blur": ""
+                },
+                model: {
+                  value: _vm.description,
+                  callback: function($$v) {
+                    _vm.description = $$v
+                  },
+                  expression: "description"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  dark: "",
+                  rules: _vm.imgRules,
+                  label: "Zdjęcie",
+                  color: "mainOrange",
+                  "validate-on-blur": ""
+                },
+                model: {
+                  value: _vm.img,
+                  callback: function($$v) {
+                    _vm.img = $$v
+                  },
+                  expression: "img"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  staticClass: "signup-btn mainOrange--text mt-8",
+                  attrs: {
+                    type: "submit",
+                    outlined: "",
+                    rounded: "",
+                    block: ""
+                  },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.handleSubmit()
+                    }
+                  }
+                },
+                [_vm._v("Dodaj")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { width: "200" },
+              model: {
+                value: _vm.addedSuccessful,
+                callback: function($$v) {
+                  _vm.addedSuccessful = $$v
+                },
+                expression: "addedSuccessful"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { staticClass: "pa-2", attrs: { color: "secondary" } },
+                [
+                  _c(
+                    "v-layout",
+                    {
+                      attrs: {
+                        column: "",
+                        "justify-center": "",
+                        "align-center": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        { staticClass: "mainOrange--text text-h5 text-center" },
+                        [_vm._v("Produkt dodany pomyślnie")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-layout",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "success" },
+                              on: {
+                                click: function($event) {
+                                  _vm.addedSuccessful = false
+                                }
+                              }
+                            },
+                            [_vm._v("OK")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
       )
     ],
     1
@@ -68999,8 +69132,23 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       path: '',
       component: _components_dashboard_Options__WEBPACK_IMPORTED_MODULE_6__["default"]
     }, {
+      name: 'addproduct',
       path: 'addproduct',
-      component: _components_dashboard_AddProduct__WEBPACK_IMPORTED_MODULE_7__["default"]
+      component: _components_dashboard_AddProduct__WEBPACK_IMPORTED_MODULE_7__["default"],
+      beforeEnter: function beforeEnter(to, from, next) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.axios.get('/api/user', {
+          withCredentials: true
+        }).then(function (res) {
+          if (res.data.account_type === 'staff') next();else next({
+            name: 'options'
+          });
+        })["catch"](function (error) {
+          console.log(error);
+          return next({
+            name: 'home'
+          });
+        });
+      }
     }, {
       name: 'products',
       path: 'products',

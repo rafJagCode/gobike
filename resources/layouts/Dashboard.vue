@@ -9,13 +9,6 @@
     <vfooter />
   </v-app>
 </template>
-
-    <!-- <div class="dashboard">
-        Dashboard <br>
-        Email: {{user.email}}<br><br>
-        <v-btn @click.prevent="logout()">Logout</v-btn>
-        </div> -->
-
 <script>
 import navigation from "@/components/home/Navigation";
 import vfooter from "@/components/home/Footer";
