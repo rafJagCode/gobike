@@ -58,13 +58,21 @@ export default {
     data:()=>({
         reservations: [],
         loading: true,
+        user: null
     }),
+    watch:{
+        '$store.getters.user': function(user){
+            if(this.$store.getters.user!=null){
+                this.user = this.$store.getters.user;
+                this.getReservations(this.user.id);
+            }
+        }
+    },
     mounted(){
-        Vue.axios.post('/api/reservations').then((res)=>{
-            console.log(res.data);
-            this.reservations = res.data;
-            this.loading = false;
-        });
+        if(this.$store.getters.user!=null){
+            this.user = this.$store.getters.user;
+            this.getReservations(this.user.id);
+        }
     },
     computed:{
         noReservations(){
@@ -75,6 +83,12 @@ export default {
         }
     },
     methods:{
+        getReservations(userId){
+            Vue.axios.post('/api/reservations', {userId:userId}).then((res)=>{
+                this.reservations = res.data;
+                this.loading = false;
+            });
+        },
         deleteReservation(index, id){
             Vue.axios.post('/api/deleteReservation', {id: id} ).then((res)=>{
                 this.reservations.splice(index, 1);

@@ -125,6 +125,11 @@
                     <v-btn class="mr-2" color="success" @click="makeReservation()">Potwierdź</v-btn>
                     <v-btn color="error" @click="dialog = false">Cancel</v-btn>
                 </v-layout>
+                <v-alert type="error" height="20" class="flex-row align-center justify-center">
+                    <div>
+                        Produkt jest już niedostępny
+                    </div>
+                </v-alert>
             </v-card>
         </v-dialog>
     </v-form>
@@ -140,6 +145,7 @@ export default {
         showAlert: false,
         alertMessage: '',
         dialog: false,
+        reservationFailed: false,
     }),
     props:{
         product: null
@@ -184,8 +190,12 @@ export default {
                 'status':1,
                 'userId':this.$store.getters.user.id,
                 'productId':this.product.id,
-            }).then(()=>{
+            })
+            .then(()=>{
                 this.$router.push({name: 'reservationConfirmation'});
+            })
+            .catch((error)=>{
+                console.log(error.message);
             });
         }
     },

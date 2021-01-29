@@ -10,7 +10,7 @@ class ReservationsController extends Controller
 {
     public function getReservations(Request $request)
     {
-        $reservations = Reservation::all();
+        $reservations = Reservation::where('user_id', $request->userId)->get();
         $reservations->map(function($reservation){
             $reservation = Arr::add($reservation, 'product', $reservation->product);
             return $reservation;
@@ -23,8 +23,10 @@ class ReservationsController extends Controller
             'dateFrom'=>$request->dateFrom,
             'dateTo'=>$request->dateTo,
             'status'=>$request->status,
+            'user_id'=>$request->userId
         ]);
         $product = Product::where('id', $request->productId)->first();
+        if(!$product->availability) return response()->json(['message'=>'Product is already reserved'], 422);
         $product->availability = false;
         $product->save();
         $reservation->product()->save($product);

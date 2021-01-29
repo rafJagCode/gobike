@@ -19,6 +19,7 @@ class CreateReservationsTable extends Migration
             $table->date('dateFrom');
             $table->date('dateTo');
             $table->integer('status');
+            $table->unsignedBigInteger('user_id')->unsigned();
         });
     }
 

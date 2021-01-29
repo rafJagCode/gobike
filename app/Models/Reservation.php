@@ -13,12 +13,16 @@ class Reservation extends Model
         'dateFrom',
         'dateTo',
         'status',
-        'userId',
+        'user_id',
         'productId'
     ];
     
     public function product()
     {
         return $this->hasOne(Product::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

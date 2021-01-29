@@ -2426,17 +2426,23 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       reservations: [],
-      loading: true
+      loading: true,
+      user: null
     };
   },
+  watch: {
+    '$store.getters.user': function $storeGettersUser(user) {
+      if (this.$store.getters.user != null) {
+        this.user = this.$store.getters.user;
+        this.getReservations(this.user.id);
+      }
+    }
+  },
   mounted: function mounted() {
-    var _this = this;
-
-    Vue.axios.post('/api/reservations').then(function (res) {
-      console.log(res.data);
-      _this.reservations = res.data;
-      _this.loading = false;
-    });
+    if (this.$store.getters.user != null) {
+      this.user = this.$store.getters.user;
+      this.getReservations(this.user.id);
+    }
   },
   computed: {
     noReservations: function noReservations() {
@@ -2449,6 +2455,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getReservations: function getReservations(userId) {
+      var _this = this;
+
+      Vue.axios.post('/api/reservations', {
+        userId: userId
+      }).then(function (res) {
+        _this.reservations = res.data;
+        _this.loading = false;
+      });
+    },
     deleteReservation: function deleteReservation(index, id) {
       var _this2 = this;
 
@@ -2956,6 +2972,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2966,7 +2987,8 @@ __webpack_require__.r(__webpack_exports__);
       modal: false,
       showAlert: false,
       alertMessage: '',
-      dialog: false
+      dialog: false,
+      reservationFailed: false
     };
   },
   props: {
@@ -3019,6 +3041,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.$router.push({
           name: 'reservationConfirmation'
         });
+      })["catch"](function (error) {
+        console.log(error.message);
       });
     }
   }
@@ -6835,6 +6859,21 @@ var render = function() {
                   )
                 ],
                 1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-alert",
+                {
+                  staticClass: "flex-row align-center justify-center",
+                  attrs: { type: "error", height: "20" }
+                },
+                [
+                  _c("div", [
+                    _vm._v(
+                      "\n                    Produkt jest już niedostępny\n                "
+                    )
+                  ])
+                ]
               )
             ],
             1
