@@ -2217,11 +2217,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      product: null
+      product: null,
+      loading: true
     };
   },
   computed: {
@@ -2233,6 +2235,12 @@ __webpack_require__.r(__webpack_exports__);
 
       ;
       return false;
+    },
+    productNotAvailable: function productNotAvailable() {
+      if (this.loading) return false;
+      if (this.product === null) return true;
+      if (!this.product.availability) return true;
+      return false;
     }
   },
   mounted: function mounted() {
@@ -2240,6 +2248,7 @@ __webpack_require__.r(__webpack_exports__);
 
     Vue.axios.get('/api/product/' + this.$route.params.id).then(function (res) {
       _this.product = res.data;
+      _this.loading = false;
     })["catch"](function () {
       _this.$router.push({
         name: 'options'
@@ -5346,7 +5355,10 @@ var render = function() {
             ],
             1
           )
-        : _c(
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.productNotAvailable
+        ? _c(
             "v-layout",
             { attrs: { "justify-center": "", "align-center": "" } },
             [
@@ -5364,6 +5376,9 @@ var render = function() {
             ],
             1
           )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.loading ? _c("loader") : _vm._e()
     ],
     1
   )

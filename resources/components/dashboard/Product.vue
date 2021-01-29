@@ -23,12 +23,13 @@
                 </div>
             </v-card>
         </div>
-        <v-layout justify-center align-center v-else>
+        <v-layout justify-center align-center v-if="productNotAvailable">
             <basic-button text="Wróć" routeName="products" icon="mdi-arrow-left"></basic-button>
             <div class="mainOrange--text text-h3 ml-3">
                 Produkt chwilowo niedostępny
             </div>
         </v-layout>
+        <loader v-if="loading"></loader>
     </v-layout>
 </template>
 <script>
@@ -37,6 +38,7 @@ export default {
     data(){
         return{
             product: null,
+            loading: true,
         }
     },
     computed:{
@@ -46,11 +48,18 @@ export default {
                 return false;
             };
             return false;
+        },
+        productNotAvailable(){
+            if(this.loading) return false;
+            if(this.product===null) return true;
+            if(!this.product.availability) return true;
+            return false; 
         }
     },
     mounted(){
         Vue.axios.get('/api/product/'+this.$route.params.id).then((res)=>{
             this.product = res.data;
+            this.loading = false;
         }).catch(()=>{
             this.$router.push({name:'options'});
         });
