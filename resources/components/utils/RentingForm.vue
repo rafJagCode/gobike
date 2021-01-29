@@ -95,6 +95,38 @@
         @click.prevent="handleSubmit()">
             WYPOŻYCZ
         </v-btn>
+        <v-dialog width="fit-content" v-model="dialog">
+            <v-card width="fit-content" color="secondary" class="mainOrange--text">
+                <v-card-title>Potwierdzenie rezerwacji</v-card-title>
+                <v-divider dark></v-divider>
+                <v-layout justify-center align-center class="reservation__confirmation">
+                    <div>
+                        <v-card-text class="py-1">Data odebrania</v-card-text>
+                        <v-card-text class="py-1">{{dateFrom}}</v-card-text>
+                    </div>
+                    <v-divider vertical dark></v-divider>
+                    <div>
+                        <v-card-text class="py-1">Data zwrotu</v-card-text>
+                        <v-card-text class="py-1">{{dateTo}}</v-card-text>
+                    </div>
+                    <v-divider vertical dark></v-divider>
+                    <div>
+                        <v-card-text class="py-1">Produkt</v-card-text>
+                        <v-card-text class="py-1">{{product.name}}</v-card-text>
+                    </div>
+                    <v-divider vertical dark></v-divider>
+                    <div>
+                        <v-card-text class="py-1">Koszt</v-card-text>
+                        <v-card-text class="py-1">{{cost(dateFrom, dateTo, product.price)}}</v-card-text>
+                    </div>
+                </v-layout>
+                <v-divider dark></v-divider>
+                <v-layout justify-end align-center class="pa-2">
+                    <v-btn class="mr-2" color="success" @click="makeReservation()">Potwierdź</v-btn>
+                    <v-btn color="error" @click="dialog = false">Cancel</v-btn>
+                </v-layout>
+            </v-card>
+        </v-dialog>
     </v-form>
 </template>
 <script>
@@ -106,10 +138,11 @@ export default {
         menu2: false,
         modal: false,
         showAlert: false,
-        alertMessage: ''
+        alertMessage: '',
+        dialog: false,
     }),
     props:{
-        productId: null
+        product: null
     },
     methods:{
         handleSubmit(){
@@ -118,21 +151,12 @@ export default {
                 this.showAlert = true;
                 return;
             }
-            else if(!this.isPeriodCorrect()) {
+            if(!this.isPeriodCorrect()) {
                 this.alertMessage = 'Data zwrotu musi być datą późniejszą niż data odebrania';
                 this.showAlert = true;
                 return;
             }
-            else{
-                Vue.axios.post('/api/makeReservation',
-                {
-                    'dateFrom':this.dateFrom,
-                    'dateTo':this.dateTo,
-                    'status':1,
-                    'userId':this.$store.getters.user.id,
-                    'productId':this.productId,
-                });
-            };
+            this.dialog = true;
         },
         isPeriodCorrect(){
             let dateFrom = new Date(this.dateFrom);
@@ -145,6 +169,24 @@ export default {
             let now = new Date(new Date().toISOString().substr(0, 10));
             if(dateFrom.getTime()<now.getTime()) return false;
             return true;
+        },
+        cost(dateFrom, dateTo, price){
+            dateFrom = new Date(dateFrom);
+            dateTo = new Date(dateTo);
+            let days = (dateTo.getTime() - dateFrom.getTime())/(1000*60*60*24);
+            return days*price + 'zł';
+        },
+        makeReservation(){
+            Vue.axios.post('/api/makeReservation',
+            {
+                'dateFrom':this.dateFrom,
+                'dateTo':this.dateTo,
+                'status':1,
+                'userId':this.$store.getters.user.id,
+                'productId':this.product.id,
+            }).then(()=>{
+                this.$router.push({name: 'reservationConfirmation'});
+            });
         }
     },
 }

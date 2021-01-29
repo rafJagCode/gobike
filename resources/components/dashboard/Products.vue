@@ -1,6 +1,7 @@
 <template>
     <v-container fill-height class="products_container" style="width:700px">
         <basic-button class="mb-5" block text="wstecz" icon="mdi-arrow-left" routeName="options"></basic-button>
+        <loader v-if="loading"></loader>
         <v-row v-for="(product, index) in products" :key="index">
             <v-card
               color="secondary"
@@ -59,12 +60,14 @@
 export default{
   data(){
       return{
-          products: []
+          products: [],
+          loading: true,
       }
   },
   mounted(){
       Vue.axios.get('/api/products').then((res)=>{
           this.products = res.data;
+          this.loading = false;
       })
   },
   methods:{

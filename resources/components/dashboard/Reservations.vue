@@ -41,7 +41,8 @@
                 </v-alert>
             </v-card>
         </div>
-        <v-container v-else flex>
+        <loader v-if="loading"></loader>
+        <v-container v-if="noReservations" flex>
             <v-alert class="text-center text-h5" height="70" width="100%" color="secondary">
                 <basic-button icon="mdi-arrow-left" text="Wróć" routeName="options" class="mr-5"></basic-button>
                 <span class="mainOrange--text">
@@ -55,14 +56,23 @@
 <script>
 export default {
     data:()=>({
-        reservations: []
+        reservations: [],
+        loading: true,
     }),
     mounted(){
-        
         Vue.axios.post('/api/reservations').then((res)=>{
             console.log(res.data);
             this.reservations = res.data;
+            this.loading = false;
         });
+    },
+    computed:{
+        noReservations(){
+            if(!this.loading){
+                if(!this.reservations.length) return true;
+            };
+            return false;
+        }
     },
     methods:{
         deleteReservation(index, id){

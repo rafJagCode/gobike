@@ -10,6 +10,7 @@ import AddProduct from '@/components/dashboard/AddProduct';
 import Products from '@/components/dashboard/Products';
 import Product from '@/components/dashboard/Product';
 import Reservations from '@/components/dashboard/Reservations';
+import ReservationConfirmation from '@/components/dashboard/ReservationConfirmation';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -65,6 +66,11 @@ const router = new VueRouter({
                     name: 'reservations',
                     path: 'reservations',
                     component: Reservations
+                },
+                {   
+                    name: 'reservationConfirmation',
+                    path: 'reservationConfirmation',
+                    component: ReservationConfirmation
                 }
             ]
         }
