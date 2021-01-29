@@ -24,3 +24,9 @@ Route::middleware('auth:sanctum')->get('/authenticated', function () {
 Route::post('register', 'RegisterController@register');
 Route::post('login', 'LoginController@login');
 Route::post('logout', 'LoginController@logout');
+Route::post('addproduct', 'ProductsController@addProduct');
+Route::get('products', 'ProductsController@getProducts');
+Route::get('product/{id}', 'ProductsController@getProduct');
+Route::post('reservations', 'ReservationsController@getReservations');
+Route::post('makeReservation', 'ReservationsController@makeReservation');
+Route::post('deleteReservation', 'ReservationsController@deleteReservation');

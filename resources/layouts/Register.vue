@@ -122,7 +122,7 @@ export default {
     },
     loginAndRedirect(){
       Vue.axios.post('api/login', {email:this.email, password:this.password}).then(()=>{
-        this.$router.push({ name: 'dashboard'});
+        this.$router.push({ name: 'options'});
       }).catch((error)=>{
         this.errors = error.response.data.errors;
       });

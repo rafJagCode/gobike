@@ -16,7 +16,9 @@ export default new Vuetify({
                 secondary: "32373B",
                 secondaryLight: "252C55",
                 accent: "3D87E4",
-                mainOrange: "FFB300"
+                mainOrange: "FFB300",
+                secondaryOrange: "F17105",
+                mainRed: "FF0F00"
             }
         }
     }
